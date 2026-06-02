@@ -6,6 +6,7 @@ import { eur, intl, firstOfMonth, lastOfMonth } from "../../lib/helpers";
 import { Card, Button, Field, Input, Select, EmptyState } from "../ui";
 import NetSummary from "./NetSummary.jsx";
 import { printReport } from "./printReport.js";
+import { downloadReportCsv } from "./reportCsv.js";
 
 export default function ReportView() {
   const t = useT();
@@ -19,8 +20,8 @@ export default function ReportView() {
   const [supplierId, setSupplierId] = useState("");
 
   const data = useMemo(
-    () => computeReport(entries, suppliers, { from, to, supplierId }),
-    [entries, suppliers, from, to, supplierId]
+    () => computeReport(entries, suppliers, { from, to, supplierId, group, allLabel: t("filt_all") }),
+    [entries, suppliers, from, to, supplierId, group, t]
   );
 
   const supplierName = supplierId ? (suppliers.find((s) => s.id === supplierId) || {}).name : "";
@@ -30,6 +31,8 @@ export default function ReportView() {
     printReport({ data, net, from, to, supplierName, t });
   };
 
+  const doCsv = () => downloadReportCsv({ data, from, to, supplierName, t });
+
   return (
     <div>
       <div className="pagehead">
@@ -37,9 +40,19 @@ export default function ReportView() {
           <h2>{t("ber_h")}</h2>
           <p>{t("ber_sub")}</p>
         </div>
-        <Button variant="ghost" className="no-print" onClick={doPrint}>
-          🖨 {t("print")}
-        </Button>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <Button
+            variant="ghost"
+            className="no-print"
+            onClick={doCsv}
+            disabled={data.count === 0}
+          >
+            ⬇ {t("csv")}
+          </Button>
+          <Button variant="ghost" className="no-print" onClick={doPrint}>
+            🖨 {t("print")}
+          </Button>
+        </div>
       </div>
 
       {/* filtreler */}

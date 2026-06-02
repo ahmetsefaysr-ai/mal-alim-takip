@@ -5,7 +5,7 @@ import { eur, fmtDate } from "../../lib/helpers";
 import { Card, Button, Pill, toast } from "../ui";
 import ReceiptViewer from "./ReceiptViewer.jsx";
 
-export default function EntryCard({ entry, onEdit }) {
+export default function EntryCard({ entry, onEdit, onCopy }) {
   const t = useT();
   const suppliers = useStore((s) => s.suppliers);
   const deleteEntry = useStore((s) => s.deleteEntry);
@@ -134,6 +134,11 @@ export default function EntryCard({ entry, onEdit }) {
             {entry.receipt && (
               <Button sm variant="subtle" onClick={() => setShowReceipt(true)}>
                 🧾 {t("view_receipt")}
+              </Button>
+            )}
+            {onCopy && (
+              <Button sm variant="ghost" onClick={() => onCopy(entry)}>
+                ⧉ {t("copy")}
               </Button>
             )}
             <Button sm variant="ghost" onClick={() => onEdit(entry)}>

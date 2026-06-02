@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useStore } from "./lib/store";
 import { useT } from "./lib/useT";
+import { today } from "./lib/helpers";
 import { cx, Toast } from "./components/ui";
 import GoodsInView from "./components/goodsin/GoodsInView.jsx";
 import RecordsView from "./components/records/RecordsView.jsx";
@@ -28,6 +29,11 @@ export default function App() {
   };
   const editEntry = (entry) => {
     setDraft(entry);
+    go("heute");
+  };
+  // Kaydı yeni giriş olarak kopyala (id'siz → addEntry; bugünün tarihiyle)
+  const copyEntry = (entry) => {
+    setDraft({ ...entry, id: undefined, date: today() });
     go("heute");
   };
 
@@ -68,7 +74,7 @@ export default function App() {
           {view === "heute" && (
             <GoodsInView draft={draft} setDraft={setDraft} onSaved={() => go("eingaenge")} />
           )}
-          {view === "eingaenge" && <RecordsView onEdit={editEntry} />}
+          {view === "eingaenge" && <RecordsView onEdit={editEntry} onCopy={copyEntry} />}
           {view === "bericht" && <ReportView />}
           {view === "stamm" && <StammView />}
         </div>
