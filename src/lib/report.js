@@ -1,12 +1,14 @@
 import { monthsInRange } from "./helpers";
 
 // Tarih aralığındaki kayıtları grupla & topla.
-// group: 'product' | 'supplier' (her ikisinde de tedarikçi başlığı altında ürün satırları)
-export function computeReport(entries, suppliers, { from, to, supplierId }) {
+// group: 'supplier' → tedarikçi başlıkları altında ürün satırları
+//        'product'  → tüm tedarikçiler arası tek liste (ürünlere göre toplanmış)
+export function computeReport(entries, suppliers, { from, to, supplierId, group = "supplier", allLabel = "—" }) {
   const supById = (id) => suppliers.find((s) => s.id === id) || {};
   let list = entries.filter((e) => e.date >= from && e.date <= to);
   if (supplierId) list = list.filter((e) => e.supplierId === supplierId);
 
+  const byProduct = group === "product";
   let totalPcs = 0,
     totalEur = 0;
   const groups = {};
@@ -17,8 +19,11 @@ export function computeReport(entries, suppliers, { from, to, supplierId }) {
       const eurv = pcs * (Number(l.price) || 0);
       totalPcs += pcs;
       totalEur += eurv;
-      const gKey = e.supplierId;
-      const gLabel = supById(e.supplierId).name || "—";
+      // Ürüne göre modda her şey tek bir grupta toplanır; satırlar productId'ye göre birleşir.
+      const gKey = byProduct ? "__all__" : e.supplierId;
+      const gLabel = byProduct
+        ? (supplierId ? supById(supplierId).name || allLabel : allLabel)
+        : supById(e.supplierId).name || "—";
       if (!groups[gKey]) groups[gKey] = { label: gLabel, pcs: 0, eur: 0, rows: {} };
       groups[gKey].pcs += pcs;
       groups[gKey].eur += eurv;
