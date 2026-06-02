@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+._*
+*.local
+.vite
+
+.claude/
+legacy/.DS_Store

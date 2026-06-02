@@ -1,0 +1,81 @@
+/* ──────────────────────────────────────────────────────────────
+   Design tokens — Açık & profesyonel
+   Beyaz/nötr zemin · ince çizgi/gölge · tek sıcak altın vurgu
+   ────────────────────────────────────────────────────────────── */
+:root {
+  /* Yüzeyler */
+  --bg: #faf9f7;
+  --bg2: #f4f2ee;
+  --card: #ffffff;
+  --line: #e9e6e1;
+  --line2: #f1efea;
+
+  /* Metin */
+  --text: #1c1917;
+  --mid: #57534e;
+  --soft: #8a847e;
+  --faint: #b5afa8;
+
+  /* Tek sıcak vurgu (gold) */
+  --gold: #9a7320;
+  --goldL: #c9a75a;
+  --goldBg: #fbf6ea;
+  --goldBd: #ecdfc2;
+
+  /* Durum renkleri */
+  --green: #15803d;
+  --greenBg: #f0faf3;
+  --greenBd: #c7ecd3;
+  --amber: #b45309;
+  --amberBg: #fff7ed;
+  --amberBd: #fde2c2;
+  --red: #b91c1c;
+  --redBg: #fef2f2;
+  --redBd: #f6cccc;
+  --blue: #1d4ed8;
+  --blueBg: #eff4ff;
+  --blueBd: #cfe0fd;
+
+  /* Kategori renkleri (pill) */
+  --c-brot: var(--gold);
+  --c-brot-bg: var(--goldBg);
+  --c-brot-bd: var(--goldBd);
+  --c-gebaeck: var(--amber);
+  --c-gebaeck-bg: var(--amberBg);
+  --c-gebaeck-bd: var(--amberBd);
+  --c-lebensmittel: var(--green);
+  --c-lebensmittel-bg: var(--greenBg);
+  --c-lebensmittel-bd: var(--greenBd);
+  --c-sonstige: var(--blue);
+  --c-sonstige-bg: var(--blueBg);
+  --c-sonstige-bd: var(--blueBd);
+
+  /* Geometri */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --radius-xs: 7px;
+  --radius-pill: 999px;
+
+  /* Boşluk ölçeği */
+  --sp1: 4px;
+  --sp2: 8px;
+  --sp3: 12px;
+  --sp4: 16px;
+  --sp5: 20px;
+  --sp6: 24px;
+  --sp8: 32px;
+
+  /* Gölge */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow-card: 0 1px 2px rgba(28, 25, 23, 0.05), 0 1px 3px rgba(28, 25, 23, 0.04);
+  --shadow-pop: 0 6px 20px rgba(28, 25, 23, 0.1), 0 2px 6px rgba(28, 25, 23, 0.05);
+  --shadow-modal: 0 24px 56px rgba(28, 25, 23, 0.18), 0 6px 16px rgba(28, 25, 23, 0.08);
+
+  /* Tipografi */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+
+  /* Geçiş */
+  --t-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --t-base: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -1,0 +1,241 @@
+/* ──────────────────────────────────────────────────────────────
+   Base · reset · tipografi · ortak yardımcı sınıflar
+   ────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4, .serif {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
+  color: inherit;
+}
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+.muted {
+  color: var(--soft);
+}
+.faint {
+  color: var(--faint);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 6px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--faint);
+}
+
+/* App layout */
+.app-shell {
+  min-height: 100vh;
+}
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header / nav */
+header.top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: saturate(1.6) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+.brand .logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  background: linear-gradient(160deg, #fff7e6, #f4ead0);
+  border: 1px solid var(--goldBd);
+  box-shadow: var(--shadow-xs);
+}
+.brand .t1 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.1;
+}
+.brand .t2 {
+  font-size: 11.5px;
+  color: var(--soft);
+  letter-spacing: 0.02em;
+  margin-top: 1px;
+}
+
+nav.tabs {
+  display: flex;
+  gap: 2px;
+  margin-top: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav.tabs::-webkit-scrollbar {
+  display: none;
+}
+nav.tabs button {
+  background: none;
+  border: none;
+  color: var(--mid);
+  padding: 11px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--t-fast);
+}
+nav.tabs button .ic {
+  font-size: 15px;
+  opacity: 0.85;
+}
+nav.tabs button:hover {
+  color: var(--text);
+}
+nav.tabs button.on {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+main {
+  padding: 26px 0 90px;
+}
+
+/* Page head */
+.pagehead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.pagehead h2 {
+  font-size: 26px;
+  color: var(--text);
+}
+.pagehead p {
+  font-size: 13.5px;
+  color: var(--soft);
+  margin-top: 3px;
+  font-family: var(--font-sans);
+}
+
+/* Lang toggle */
+.langbtn {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--card);
+}
+.langbtn button {
+  background: none;
+  border: none;
+  color: var(--soft);
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all var(--t-fast);
+}
+.langbtn button.on {
+  background: var(--goldBg);
+  color: var(--gold);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fadeUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 14px;
+  }
+  .pagehead h2 {
+    font-size: 22px;
+  }
+  main {
+    padding: 18px 0 72px;
+  }
+}
+
+/* Print */
+@media print {
+  header.top,
+  nav.tabs,
+  .no-print {
+    display: none !important;
+  }
+}

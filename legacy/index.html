@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wareneingang & Einkauf · Mal Takip</title>
+<style>
+  :root{
+    --bg:#1A0A04; --panel:#241008; --panel2:#2E160C; --line:#3D2418;
+    --gold:#E8C880; --goldL:#3a2a14; --goldBg:rgba(232,200,128,.08);
+    --cream:#F3E8D8; --mid:#C9B79C; --soft:#9c876c; --faint:#6e5742;
+    --green:#A9DFBF; --greenBg:rgba(169,223,191,.1);
+    --blue:#85C1E9; --blueBg:rgba(133,193,233,.1);
+    --red:#E8A0A0; --redBg:rgba(232,160,160,.1);
+    --amber:#F0B27A; --amberBg:rgba(240,178,122,.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--cream);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif}
+  .tnum{font-variant-numeric:tabular-nums}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+  a{color:var(--gold)}
+
+  /* layout */
+  header.top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#1f0c05,#1A0A04);
+    border-bottom:1px solid var(--line);padding:14px 20px}
+  .top-row{display:flex;align-items:center;gap:16px;max-width:1180px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+  .logo{width:38px;height:38px;border-radius:10px;flex-shrink:0;
+    background:radial-gradient(circle at 30% 25%,#3a230f,#1c0d05);
+    border:1px solid var(--goldL);display:grid;place-items:center;font-size:20px}
+  .brand .t1{font-family:Georgia,serif;font-size:19px;font-weight:600;color:var(--gold);letter-spacing:.2px;line-height:1.1}
+  .brand .t2{font-size:11px;color:var(--faint);letter-spacing:.5px}
+  .langbtn{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .langbtn button{background:none;border:none;color:var(--soft);padding:6px 11px;font-size:12px;font-weight:600}
+  .langbtn button.on{background:var(--goldBg);color:var(--gold)}
+  nav.tabs{display:flex;gap:4px;max-width:1180px;margin:12px auto 0;flex-wrap:wrap}
+  nav.tabs button{background:none;border:1px solid transparent;color:var(--mid);
+    padding:8px 15px;border-radius:9px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px}
+  nav.tabs button:hover{background:var(--panel)}
+  nav.tabs button.on{background:var(--panel2);border-color:var(--goldL);color:var(--gold)}
+  nav.tabs .ic{font-size:15px}
+
+  main{max-width:1180px;margin:0 auto;padding:22px 20px 80px}
+  .pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+  .pagehead h2{font-size:25px;font-weight:600;color:var(--cream);letter-spacing:-.3px}
+  .pagehead p{font-size:13px;color:var(--soft);margin-top:3px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card+.card{margin-top:16px}
+  .accent{height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.5;border-radius:2px;margin:-18px -18px 16px}
+
+  label.lbl{display:block;font-size:10.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .inp{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+    color:var(--cream);padding:9px 11px;font-size:14px;outline:none;transition:border-color .15s}
+  .inp:focus{border-color:var(--gold)}
+  select.inp{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239c876c' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:140px}
+
+  .btn{border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+  .btn-gold{background:linear-gradient(180deg,#f0d089,#d8b76a);color:#2a1808}
+  .btn-gold:hover{filter:brightness(1.05)}
+  .btn-ghost{background:var(--panel2);border:1px solid var(--line);color:var(--mid)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-red{background:var(--redBg);border:1px solid rgba(232,160,160,.3);color:var(--red)}
+  .btn-sm{padding:6px 13px;font-size:12.5px;border-radius:8px}
+
+  table.tb{width:100%;border-collapse:collapse}
+  table.tb th{font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--faint);
+    text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  table.tb td{padding:9px 10px;border-bottom:1px solid rgba(61,36,24,.5);font-size:13.5px;vertical-align:middle}
+  table.tb tr:last-child td{border-bottom:none}
+  table.tb .num{text-align:right;font-variant-numeric:tabular-nums}
+  .qin{width:74px;background:var(--bg);border:1px solid var(--line);border-radius:7px;color:var(--cream);
+    padding:6px 8px;font-size:14px;text-align:center;font-variant-numeric:tabular-nums;outline:none}
+  .qin:focus{border-color:var(--gold)}
+  .qin.diff{border-color:var(--amber);color:var(--amber)}
+
+  .pill{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:20px;display:inline-block;white-space:nowrap}
+  .pill-brot{background:var(--goldBg);color:var(--gold);border:1px solid var(--goldL)}
+  .pill-gebaeck{background:var(--amberBg);color:var(--amber);border:1px solid rgba(240,178,122,.3)}
+  .pill-lebensmittel{background:var(--greenBg);color:var(--green);border:1px solid rgba(169,223,191,.3)}
+  .pill-sonstige{background:var(--blueBg);color:var(--blue);border:1px solid rgba(133,193,233,.3)}
+
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex:1;min-width:150px}
+  .stat .k{font-size:11px;color:var(--soft);letter-spacing:.3px}
+  .stat .v{font-family:Georgia,serif;font-size:26px;font-weight:600;color:var(--gold);margin-top:3px}
+  .stat .v.sm{font-size:21px;color:var(--cream)}
+
+  .empty{text-align:center;color:var(--faint);padding:46px 20px;font-size:14px}
+  .empty .ic{font-size:34px;opacity:.5;display:block;margin-bottom:10px}
+
+  .thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid var(--line);cursor:pointer;background:var(--bg)}
+  .thumb-pdf{width:42px;height:42px;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;font-size:18px;cursor:pointer;background:var(--panel2)}
+
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(8,3,1,.7);backdrop-filter:blur(3px);z-index:50;display:grid;place-items:center;padding:20px}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:100%;max-width:560px;max-height:88vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .modal-h{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+  .modal-h h3{font-size:19px;color:var(--cream)}
+  .modal-h p{font-size:12px;color:var(--soft);margin-top:2px}
+  .x{background:none;border:none;color:var(--soft);font-size:22px;line-height:1;padding:2px 6px}
+  .modal-b{padding:20px}
+  .modal-f{display:flex;gap:10px;justify-content:flex-end;padding:0 20px 20px}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:90;
+    background:var(--panel2);border:1px solid var(--gold);color:var(--cream);
+    padding:11px 20px;border-radius:11px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .hint{font-size:12px;color:var(--soft);background:var(--blueBg);border:1px solid rgba(133,193,233,.25);
+    border-radius:9px;padding:9px 13px;display:flex;gap:8px;align-items:flex-start}
+  .sub{font-size:12px;color:var(--faint)}
+  .grp-h{font-family:Georgia,serif;font-size:15px;color:var(--gold);margin:18px 0 8px;display:flex;align-items:center;gap:9px}
+  .grp-h .ln{flex:1;height:1px;background:var(--line)}
+  @media (max-width:640px){
+    .pagehead h2{font-size:21px}
+    .qin{width:60px}
+    main{padding:16px 13px 70px}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="logo">🥨</div>
+      <div style="min-width:0">
+        <div class="t1" id="brandT1">Mal & Alım Takip</div>
+        <div class="t2" id="brandT2">Wareneingang · Einkauf · Bericht</div>
+      </div>
+    </div>
+    <div class="langbtn">
+      <button id="lng-tr" onclick="setLang('tr')">TR</button>
+      <button id="lng-de" onclick="setLang('de')">DE</button>
+    </div>
+  </div>
+  <nav class="tabs" id="nav"></nav>
+</header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Mal & Alım Takip  —  tek dosya, bağımsız, offline
+   Veri tarayıcıda (localStorage) saklanır.
+   ============================================================ */
+const LS_KEY = 'wek_data_v1';
+
+/* ---------- i18n ---------- */
+const I18N = {
+  tr:{
+    brandT1:'Mal & Alım Takip', brandT2:'Gelen mal · Alım · Aylık rapor',
+    nav_heute:'Mal Girişi', nav_eingaenge:'Kayıtlar', nav_bericht:'Aylık Rapor', nav_stamm:'Tanımlar',
+    heute_h:'Gelen Mal / Alım Girişi', heute_sub:'Tedarikçiyi seç, gelen adetleri yaz, fişi ekle.',
+    supplier:'Tedarikçi', date:'Tarih', note:'Not', receipt:'Fiş / İrsaliye',
+    product:'Ürün', ordered:'Sipariş', received:'Gelen', unitprice:'Birim €', amount:'Tutar', cat:'Kategori',
+    total:'Toplam', save:'Kaydet', saved:'Kaydedildi ✓', cancel:'Vazgeç', edit:'Düzenle', del:'Sil',
+    addrow:'+ Ürün ekle', pickfile:'Dosya seç', nofile:'fiş eklenmedi', view:'Gör',
+    heute_tip:'İpucu: "Sipariş" sütunu standart siparişten otomatik dolar. Sadece fiilen GELEN adedi düzelt (ör. Semmel 55 yerine 50).',
+    eing_h:'Kayıtlar', eing_sub:'Tüm mal giriş ve alımların.',
+    filt_month:'Ay', filt_all:'Tümü', filt_supplier:'Tedarikçi',
+    empty_eing:'Henüz kayıt yok. "Mal Girişi"nden ekle.',
+    items:'kalem', pcs:'adet', del_confirm:'Bu kaydı silmek istediğine emin misin?',
+    ber_h:'Aylık Rapor / Net', ber_sub:'Tarih aralığında ne kadar mal aldığını ve tutarını gör.',
+    from:'Başlangıç', to:'Bitiş', groupby:'Grupla', g_product:'Ürüne göre', g_supplier:'Tedarikçiye göre',
+    thismonth:'Bu ay', lastmonth:'Geçen ay', print:'Yazdır / PDF',
+    grand_total:'GENEL TOPLAM', net_pcs:'Toplam adet', net_eur:'Toplam tutar', records:'kayıt',
+    empty_ber:'Bu aralıkta kayıt yok.',
+    stamm_h:'Tanımlar', stamm_sub:'Tedarikçi ve ürünleri yönet, veriyi yedekle.',
+    suppliers:'Tedarikçiler', products:'Ürünler', addsupplier:'+ Tedarikçi', addproduct:'+ Ürün',
+    name:'Ad', unit:'Birim', defaultqty:'Std. sipariş', artno:'Art.Nr',
+    backup:'Veri yedeği', export:'Dışa aktar (JSON)', import:'İçe al (JSON)', reset:'Tümünü sıfırla',
+    reset_confirm:'TÜM veriler silinip başlangıç verisine dönülecek. Emin misin?',
+    new_supplier:'Yeni Tedarikçi', new_product:'Yeni Ürün', edit_supplier:'Tedarikçi Düzenle', edit_product:'Ürün Düzenle',
+    c_brot:'Ekmek', c_gebaeck:'Pasta/Börek', c_lebensmittel:'Market', c_sonstige:'Diğer',
+    must_supplier:'Önce bir tedarikçi seç.', no_products:'Bu tedarikçinin ürünü yok. "Tanımlar"dan ekle.',
+    print_title:'Alım Özeti', period:'Dönem', generated:'Oluşturulma',
+    diff_note:'Sipariş ≠ Gelen olan satırlar', back_today:'Bugün',
+  },
+  de:{
+    brandT1:'Wareneingang & Einkauf', brandT2:'Lieferungen · Einkauf · Bericht',
+    nav_heute:'Erfassen', nav_eingaenge:'Einträge', nav_bericht:'Bericht', nav_stamm:'Stammdaten',
+    heute_h:'Wareneingang / Einkauf erfassen', heute_sub:'Lieferant wählen, gelieferte Mengen eintragen, Beleg anhängen.',
+    supplier:'Lieferant', date:'Datum', note:'Notiz', receipt:'Beleg / Lieferschein',
+    product:'Artikel', ordered:'Bestellt', received:'Geliefert', unitprice:'Preis €', amount:'Betrag', cat:'Kategorie',
+    total:'Summe', save:'Speichern', saved:'Gespeichert ✓', cancel:'Abbrechen', edit:'Bearbeiten', del:'Löschen',
+    addrow:'+ Artikel', pickfile:'Datei wählen', nofile:'kein Beleg', view:'Ansehen',
+    heute_tip:'Tipp: Spalte "Bestellt" wird aus der Standardbestellung gefüllt. Korrigiere nur die tatsächlich GELIEFERTE Menge (z.B. 50 statt 55 Semmel).',
+    eing_h:'Einträge', eing_sub:'Alle Wareneingänge und Einkäufe.',
+    filt_month:'Monat', filt_all:'Alle', filt_supplier:'Lieferant',
+    empty_eing:'Noch keine Einträge. Über "Erfassen" anlegen.',
+    items:'Pos.', pcs:'Stk', del_confirm:'Diesen Eintrag wirklich löschen?',
+    ber_h:'Bericht / Netto', ber_sub:'Sieh, wie viel du im Zeitraum bezogen hast und den Betrag.',
+    from:'Von', to:'Bis', groupby:'Gruppieren', g_product:'Nach Artikel', g_supplier:'Nach Lieferant',
+    thismonth:'Dieser Monat', lastmonth:'Letzter Monat', print:'Drucken / PDF',
+    grand_total:'GESAMTSUMME', net_pcs:'Menge gesamt', net_eur:'Betrag gesamt', records:'Einträge',
+    empty_ber:'Keine Einträge in diesem Zeitraum.',
+    stamm_h:'Stammdaten', stamm_sub:'Lieferanten und Artikel verwalten, Daten sichern.',
+    suppliers:'Lieferanten', products:'Artikel', addsupplier:'+ Lieferant', addproduct:'+ Artikel',
+    name:'Name', unit:'Einheit', defaultqty:'Std.-Bestellung', artno:'Art.Nr',
+    backup:'Datensicherung', export:'Export (JSON)', import:'Import (JSON)', reset:'Alles zurücksetzen',
+    reset_confirm:'ALLE Daten werden gelöscht und auf Startdaten zurückgesetzt. Sicher?',
+    new_supplier:'Neuer Lieferant', new_product:'Neuer Artikel', edit_supplier:'Lieferant bearbeiten', edit_product:'Artikel bearbeiten',
+    c_brot:'Brot', c_gebaeck:'Gebäck', c_lebensmittel:'Lebensmittel', c_sonstige:'Sonstige',
+    must_supplier:'Bitte zuerst einen Lieferanten wählen.', no_products:'Dieser Lieferant hat keine Artikel. Unter "Stammdaten" anlegen.',
+    print_title:'Einkaufsübersicht', period:'Zeitraum', generated:'Erstellt',
+    diff_note:'Zeilen mit Bestellt ≠ Geliefert', back_today:'Heute',
+  }
+};
+function t(k){ return (I18N[S.lang]&&I18N[S.lang][k]) || (I18N.tr[k]||k); }
+
+/* ---------- seed data ---------- */
+function seed(){
+  const KZ='s_kainz', SM='s_simit', MT='s_metro';
+  const P=(supplierId,art,name,category,unit,price,defaultQty)=>(
+    {id:'p_'+Math.random().toString(36).slice(2,8),supplierId,art,name,category,unit,price,defaultQty});
+  const products=[
+    // ---- Kainz Schwanen (Lieferschein'daki ürünler) ----
+    P(KZ,'50','Schwarzbrot groß','brot','Stk',3.18,1),
+    P(KZ,'60','Schwarzbrot klein','brot','Stk',1.89,1),
+    P(KZ,'250','Kastenbrot 350g','brot','Stk',2.80,1),
+    P(KZ,'300','Wurzelbrot hell','brot','Stk',1.40,2),
+    P(KZ,'410','Salzstangen','gebaeck','Stk',0.39,2),
+    P(KZ,'420','Semmel','gebaeck','Stk',0.39,55),
+    P(KZ,'481','Pärle gr.','gebaeck','Stk',0.98,4),
+    P(KZ,'486','Dinkelbürli 4er HGB','brot','Stk',1.95,4),
+    P(KZ,'645','Brezel 9dag','gebaeck','Stk',0.88,8),
+    P(KZ,'670','Laugenweggle','gebaeck','Stk',0.57,20),
+    P(KZ,'671','Käselaugenweggle','gebaeck','Stk',0.88,1),
+    P(KZ,'780','Kornspitz m. Sesam','brot','Stk',0.66,13),
+    P(KZ,'1215','Vollkornmopa','brot','Stk',3.12,10),
+    P(KZ,'2020','Gipfel','gebaeck','Stk',0.94,8),
+    P(KZ,'2030','Haselnussgipfel','gebaeck','Stk',1.30,3),
+    P(KZ,'2031','Dinkel Hefenusskipfel','gebaeck','Stk',1.85,4),
+    P(KZ,'2034','Dinkel Hefetopfen','gebaeck','Stk',1.85,4),
+    P(KZ,'2039','Puddingschnecken','gebaeck','Stk',1.20,2),
+    P(KZ,'2040','Nußschnecke','gebaeck','Stk',1.37,3),
+    P(KZ,'2050','Topfentaschen','gebaeck','Stk',1.43,4),
+    P(KZ,'2180','Croissants','gebaeck','Stk',0.78,20),
+    P(KZ,'2182','Laugencroissant','gebaeck','Stk',0.88,12),
+    P(KZ,'2220','Edgar','gebaeck','Stk',1.56,8),
+    P(KZ,'2251','Rosinenbutterweggle','gebaeck','Stk',1.30,6),
+    // ---- Simitçi ----
+    P(SM,'','Simit','gebaeck','Stk',0.60,30),
+    P(SM,'','Açma','gebaeck','Stk',0.70,15),
+    P(SM,'','Poğaça','gebaeck','Stk',0.80,15),
+    P(SM,'','Su Böreği','gebaeck','kg',12.00,2),
+    P(SM,'','Baklava (tepsi)','gebaeck','kg',18.00,1),
+    // ---- Metro (market) ----
+    P(MT,'','Salami','lebensmittel','Pkg',4.50,2),
+    P(MT,'','Schinken','lebensmittel','Pkg',5.20,2),
+    P(MT,'','Tomaten','lebensmittel','kg',1.80,5),
+    P(MT,'','Gurken','lebensmittel','Stk',1.20,6),
+    P(MT,'','Champignons','lebensmittel','Pkg',2.40,3),
+    P(MT,'','Gouda','lebensmittel','kg',6.90,2),
+    P(MT,'','Eier (10er)','lebensmittel','Pkg',3.20,4),
+  ];
+  return {
+    lang:'tr',
+    view:'heute',
+    suppliers:[
+      {id:KZ,name:'Kainz Schwanen',category:'brot',color:'#E8C880'},
+      {id:SM,name:'Simitçi',category:'gebaeck',color:'#F0B27A'},
+      {id:MT,name:'Metro',category:'lebensmittel',color:'#A9DFBF'},
+    ],
+    products,
+    entries:[],
+  };
+}
+
+/* ---------- state ---------- */
+let S = load();
+function load(){
+  try{ const r=localStorage.getItem(LS_KEY); if(r){const d=JSON.parse(r); if(d&&d.suppliers) return d;} }catch(e){}
+  const s=seed(); try{localStorage.setItem(LS_KEY,JSON.stringify(s));}catch(e){} return s;
+}
+function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){ toast('localStorage hatası'); } }
+
+/* ---------- helpers ---------- */
+const uid = ()=> Math.random().toString(36).slice(2,9);
+const today = ()=> new Date().toISOString().slice(0,10);
+function eur(n){ return (Number(n)||0).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function el(html){ const tp=document.createElement('template'); tp.innerHTML=html.trim(); return tp.content.firstChild; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function supById(id){ return S.suppliers.find(s=>s.id===id); }
+function prodById(id){ return S.products.find(p=>p.id===id); }
+function prodsOf(sid){ return S.products.filter(p=>p.supplierId===sid); }
+function catLabel(c){ return t('c_'+c)||c; }
+function monthOf(d){ return (d||'').slice(0,7); }
+function fmtDate(d){ if(!d) return ''; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),1900);
+}
+
+/* ---------- lang & nav ---------- */
+function setLang(l){ S.lang=l; document.documentElement.lang=l; save(); render(); }
+function go(v){ S.view=v; render(); window.scrollTo(0,0); }
+
+const NAV=[['heute','📥'],['eingaenge','📚'],['bericht','📊'],['stamm','⚙️']];
+function renderNav(){
+  const nav=document.getElementById('nav'); nav.innerHTML='';
+  NAV.forEach(([v,ic])=>{
+    const b=el(`<button class="${S.view===v?'on':''}"><span class="ic">${ic}</span>${esc(t('nav_'+(v==='stamm'?'stamm':v)))}</button>`);
+    b.onclick=()=>go(v); nav.appendChild(b);
+  });
+  document.getElementById('brandT1').textContent=t('brandT1');
+  document.getElementById('brandT2').textContent=t('brandT2');
+  document.getElementById('lng-tr').className=S.lang==='tr'?'on':'';
+  document.getElementById('lng-de').className=S.lang==='de'?'on':'';
+}
+
+/* ---------- main render ---------- */
+function render(){
+  renderNav();
+  const app=document.getElementById('app'); app.innerHTML='';
+  if(S.view==='heute') app.appendChild(viewHeute());
+  else if(S.view==='eingaenge') app.appendChild(viewEingaenge());
+  else if(S.view==='bericht') app.appendChild(viewBericht());
+  else if(S.view==='stamm') app.appendChild(viewStamm());
+}
+
+/* ============================================================
+   VIEW 1 — Mal Girişi (Heute)
+   ============================================================ */
+let HE = { supplierId:null, date:today(), lines:[], note:'', receipt:null, receiptName:'', editId:null };
+
+function startEntry(sid, prefill=true){
+  HE.supplierId=sid; HE.editId=null; HE.note=''; HE.receipt=null; HE.receiptName=''; HE.date=today();
+  HE.lines = prefill ? prodsOf(sid).map(p=>({productId:p.id, ordered:p.defaultQty, received:p.defaultQty})) : [];
+}
+function viewHeute(){
+  const wrap=el(`<div></div>`);
+  wrap.appendChild(el(`<div class="pagehead"><div>
+      <h2>${esc(t('heute_h'))}</h2><p>${esc(t('heute_sub'))}</p></div></div>`));
+
+  // supplier picker
+  const card=el(`<div class="card"></div>`);
+  card.appendChild(el(`<div class="accent"></div>`));
+  const top=el(`<div class="row" style="align-items:flex-end"></div>`);
+  // supplier select
+  const supWrap=el(`<div style="flex:2"></div>`);
+  supWrap.appendChild(el(`<label class="lbl">${esc(t('supplier'))}</label>`));
+  const sel=el(`<select class="inp"></select>`);
+  sel.appendChild(el(`<option value="">— ${esc(t('supplier'))} —</option>`));
+  S.suppliers.forEach(s=> sel.appendChild(el(`<option value="${s.id}" ${HE.supplierId===s.id?'selected':''}>${esc(s.name)}</option>`)));
+  sel.onchange=()=>{ if(sel.value){ startEntry(sel.value); } else { HE.supplierId=null; HE.lines=[]; } render(); };
+  supWrap.appendChild(sel);
+  top.appendChild(supWrap);
+  // date
+  const dWrap=el(`<div></div>`);
+  dWrap.appendChild(el(`<label class="lbl">${esc(t('date'))}</label>`));
+  const dInp=el(`<input type="date" class="inp" value="${HE.date}">`);
+  dInp.onchange=()=>HE.date=dInp.value;
+  dWrap.appendChild(dInp);
+  top.appendChild(dWrap);
+  card.appendChild(top);
+  wrap.appendChild(card);
+
+  if(!HE.supplierId){
+    wrap.appendChild(el(`<div class="empty"><span class="ic">📥</span>${esc(t('must_supplier'))}</div>`));
+    return wrap;
+  }
+  if(HE.lines.length===0){
+    wrap.appendChild(el(`<div class="empty"><span class="ic">📦</span>${esc(t('no_products'))}</div>`));
+    return wrap;
+  }
+
+  // tip
+  wrap.appendChild(el(`<div class="card" style="padding:0"><div class="hint" style="border:none;border-radius:14px"><span>💡</span><span>${esc(t('heute_tip'))}</span></div></div>`));
+
+  // items table
+  const tcard=el(`<div class="card"></div>`);
+  const tbl=el(`<table class="tb"></table>`);
+  tbl.appendChild(el(`<thead><tr>
+      <th>${esc(t('product'))}</th>
+      <th class="num">${esc(t('ordered'))}</th>
+      <th class="num">${esc(t('received'))}</th>
+      <th class="num">${esc(t('unitprice'))}</th>
+      <th class="num">${esc(t('amount'))}</th>
+    </tr></thead>`));
+  const tb=el(`<tbody></tbody>`);
+  HE.lines.forEach((ln,i)=>{
+    const p=prodById(ln.productId)||{name:'?',price:0,unit:''};
+    const tr=el(`<tr>
+        <td>${esc(p.name)} <span class="sub">${p.art?('· '+esc(p.art)):''} ${esc(p.unit||'')}</span></td>
+        <td class="num"><input class="qin" data-k="ordered" data-i="${i}" type="number" min="0" value="${ln.ordered}"></td>
+        <td class="num"><input class="qin ${ln.ordered!=ln.received?'diff':''}" data-k="received" data-i="${i}" type="number" min="0" value="${ln.received}"></td>
+        <td class="num tnum">${eur(p.price)}</td>
+        <td class="num tnum" data-amt="${i}">${eur((Number(ln.received)||0)*(Number(p.price)||0))}</td>
+      </tr>`);
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+  tcard.appendChild(tbl);
+  // total bar
+  const totbar=el(`<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:13px;border-top:1.5px solid var(--line)">
+      <span class="sub" id="he-pcs"></span>
+      <span class="serif" style="font-size:23px;font-weight:600;color:var(--gold)" id="he-eur"></span></div>`);
+  tcard.appendChild(totbar);
+  wrap.appendChild(tcard);
+
+  // receipt + note
+  const meta=el(`<div class="card"></div>`);
+  const mrow=el(`<div class="row"></div>`);
+  // receipt
+  const rc=el(`<div style="flex:1"></div>`);
+  rc.appendChild(el(`<label class="lbl">${esc(t('receipt'))}</label>`));
+  const rcBox=el(`<div style="display:flex;gap:10px;align-items:center"></div>`);
+  const fileBtn=el(`<button class="btn btn-ghost btn-sm">📎 ${esc(t('pickfile'))}</button>`);
+  const fileInp=el(`<input type="file" accept="image/*,application/pdf" style="display:none">`);
+  const fileLbl=el(`<span class="sub" id="he-fname">${HE.receipt?esc(HE.receiptName):esc(t('nofile'))}</span>`);
+  fileBtn.onclick=()=>fileInp.click();
+  fileInp.onchange=()=>{ const f=fileInp.files[0]; if(!f) return;
+    const rd=new FileReader(); rd.onload=()=>{ HE.receipt=rd.result; HE.receiptName=f.name; document.getElementById('he-fname').textContent=f.name; }; rd.readAsDataURL(f); };
+  rcBox.appendChild(fileBtn); rcBox.appendChild(fileInp); rcBox.appendChild(fileLbl);
+  rc.appendChild(rcBox);
+  mrow.appendChild(rc);
+  meta.appendChild(mrow);
+  const nWrap=el(`<div style="margin-top:12px"></div>`);
+  nWrap.appendChild(el(`<label class="lbl">${esc(t('note'))}</label>`));
+  const nInp=el(`<input class="inp" value="${esc(HE.note)}">`);
+  nInp.oninput=()=>HE.note=nInp.value;
+  nWrap.appendChild(nInp);
+  meta.appendChild(nWrap);
+  wrap.appendChild(meta);
+
+  // actions
+  const act=el(`<div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px"></div>`);
+  const saveB=el(`<button class="btn btn-gold">💾 ${esc(t('save'))}</button>`);
+  saveB.onclick=saveEntry;
+  act.appendChild(saveB);
+  wrap.appendChild(act);
+
+  // attach live recalculation
+  setTimeout(()=>{
+    tb.querySelectorAll('.qin').forEach(inp=>{
+      inp.addEventListener('input',()=>{
+        const i=+inp.dataset.i, k=inp.dataset.k;
+        HE.lines[i][k]=Math.max(0,parseInt(inp.value)||0);
+        const p=prodById(HE.lines[i].productId)||{price:0};
+        const amtCell=tb.querySelector(`[data-amt="${i}"]`);
+        if(amtCell) amtCell.textContent=eur((HE.lines[i].received)*(p.price||0));
+        if(k==='received'||k==='ordered'){
+          const rec=tb.querySelectorAll('.qin[data-k="received"]')[i];
+          if(rec) rec.classList.toggle('diff', HE.lines[i].ordered!=HE.lines[i].received);
+        }
+        updHeTotals();
+      });
+    });
+    updHeTotals();
+  },0);
+
+  return wrap;
+}
+function updHeTotals(){
+  let pcs=0,sum=0;
+  HE.lines.forEach(ln=>{ const p=prodById(ln.productId)||{price:0}; pcs+=Number(ln.received)||0; sum+=(Number(ln.received)||0)*(p.price||0); });
+  const a=document.getElementById('he-pcs'), b=document.getElementById('he-eur');
+  if(a) a.textContent = pcs+' '+t('pcs');
+  if(b) b.textContent = '€ '+eur(sum);
+}
+function saveEntry(){
+  const lines = HE.lines.filter(l=> (Number(l.received)||0)>0 || (Number(l.ordered)||0)>0)
+    .map(l=>{ const p=prodById(l.productId)||{}; return {productId:l.productId, name:p.name, art:p.art, unit:p.unit,
+        ordered:Number(l.ordered)||0, received:Number(l.received)||0, price:Number(p.price)||0}; });
+  if(lines.length===0){ toast('—'); return; }
+  const entry={ id:HE.editId||('e_'+uid()), date:HE.date, supplierId:HE.supplierId,
+    lines, receipt:HE.receipt, receiptName:HE.receiptName, note:HE.note, createdAt:Date.now() };
+  if(HE.editId){ const idx=S.entries.findIndex(e=>e.id===HE.editId); if(idx>=0) S.entries[idx]=entry; }
+  else S.entries.unshift(entry);
+  save(); toast(t('saved'));
+  HE={ supplierId:null,date:today(),lines:[],note:'',receipt:null,receiptName:'',editId:null };
+  go('eingaenge');
+}
+
+/* ============================================================
+   VIEW 2 — Kayıtlar (Eingänge)
+   ============================================================ */
+let EF = { month:'', supplierId:'' };
+function viewEingaenge(){
+  const wrap=el(`<div></div>`);
+  wrap.appendChild(el(`<div class="pagehead"><div>
+      <h2>${esc(t('eing_h'))}</h2><p>${esc(t('eing_sub'))}</p></div></div>`));
+
+  // filters
+  const fc=el(`<div class="card"><div class="row"></div></div>`);
+  const fr=fc.querySelector('.row');
+  // month
+  const months=[...new Set(S.entries.map(e=>monthOf(e.date)))].sort().reverse();
+  const mWrap=el(`<div></div>`); mWrap.appendChild(el(`<label class="lbl">${esc(t('filt_month'))}</label>`));
+  const mSel=el(`<select class="inp"><option value="">${esc(t('filt_all'))}</option></select>`);
+  months.forEach(m=> mSel.appendChild(el(`<option value="${m}" ${EF.month===m?'selected':''}>${esc(m)}</option>`)));
+  mSel.onchange=()=>{EF.month=mSel.value; render();};
+  mWrap.appendChild(mSel); fr.appendChild(mWrap);
+  // supplier
+  const sWrap=el(`<div></div>`); sWrap.appendChild(el(`<label class="lbl">${esc(t('filt_supplier'))}</label>`));
+  const sSel=el(`<select class="inp"><option value="">${esc(t('filt_all'))}</option></select>`);
+  S.suppliers.forEach(s=> sSel.appendChild(el(`<option value="${s.id}" ${EF.supplierId===s.id?'selected':''}>${esc(s.name)}</option>`)));
+  sSel.onchange=()=>{EF.supplierId=sSel.value; render();};
+  sWrap.appendChild(sSel); fr.appendChild(sWrap);
+  wrap.appendChild(fc);
+
+  let list=S.entries.slice();
+  if(EF.month) list=list.filter(e=>monthOf(e.date)===EF.month);
+  if(EF.supplierId) list=list.filter(e=>e.supplierId===EF.supplierId);
+  list.sort((a,b)=> (b.date||'').localeCompare(a.date||'') || b.createdAt-a.createdAt);
+
+  if(list.length===0){
+    wrap.appendChild(el(`<div class="empty"><span class="ic">📚</span>${esc(t('empty_eing'))}</div>`));
+    return wrap;
+  }
+  list.forEach(e=> wrap.appendChild(entryCard(e)));
+  return wrap;
+}
+function entryCard(e){
+  const sup=supById(e.supplierId)||{name:'?',category:'sonstige',color:'#888'};
+  let pcs=0,sum=0; e.lines.forEach(l=>{pcs+=l.received; sum+=l.received*l.price;});
+  const card=el(`<div class="card" style="padding:15px 18px"></div>`);
+  const head=el(`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap"></div>`);
+  const left=el(`<div style="display:flex;gap:12px;align-items:center;min-width:0"></div>`);
+  if(e.receipt){
+    if((e.receipt||'').startsWith('data:application/pdf')){
+      const pv=el(`<div class="thumb-pdf">📄</div>`); pv.onclick=()=>openReceipt(e.receipt); left.appendChild(pv);
+    } else {
+      const im=el(`<img class="thumb" src="${e.receipt}">`); im.onclick=()=>openReceipt(e.receipt); left.appendChild(im);
+    }
+  } else {
+    left.appendChild(el(`<div class="thumb-pdf" style="opacity:.4;font-size:15px">—</div>`));
+  }
+  const info=el(`<div style="min-width:0"></div>`);
+  info.appendChild(el(`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="serif" style="font-size:17px;color:var(--cream);font-weight:600">${esc(sup.name)}</span>
+      <span class="pill pill-${sup.category}">${esc(catLabel(sup.category))}</span></div>`));
+  info.appendChild(el(`<div class="sub" style="margin-top:2px">${fmtDate(e.date)} · ${e.lines.length} ${esc(t('items'))}${e.note?(' · '+esc(e.note)):''}</div>`));
+  left.appendChild(info);
+  head.appendChild(left);
+  const right=el(`<div style="text-align:right"></div>`);
+  right.appendChild(el(`<div class="serif tnum" style="font-size:21px;font-weight:600;color:var(--gold)">€ ${eur(sum)}</div>`));
+  right.appendChild(el(`<div class="sub tnum">${pcs} ${esc(t('pcs'))}</div>`));
+  head.appendChild(right);
+  card.appendChild(head);
+
+  // expandable detail
+  const det=el(`<div style="margin-top:12px;display:none"></div>`);
+  const tbl=el(`<table class="tb"></table>`);
+  tbl.appendChild(el(`<thead><tr><th>${esc(t('product'))}</th><th class="num">${esc(t('ordered'))}</th><th class="num">${esc(t('received'))}</th><th class="num">${esc(t('unitprice'))}</th><th class="num">${esc(t('amount'))}</th></tr></thead>`));
+  const tb=el(`<tbody></tbody>`);
+  e.lines.forEach(l=> tb.appendChild(el(`<tr>
+      <td>${esc(l.name)} <span class="sub">${l.unit?esc(l.unit):''}</span></td>
+      <td class="num tnum" style="color:var(--soft)">${l.ordered}</td>
+      <td class="num tnum ${l.ordered!=l.received?'':''}" style="${l.ordered!=l.received?'color:var(--amber);font-weight:600':''}">${l.received}</td>
+      <td class="num tnum">${eur(l.price)}</td>
+      <td class="num tnum">${eur(l.received*l.price)}</td></tr>`)));
+  tbl.appendChild(tb); det.appendChild(tbl);
+  const acts=el(`<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"></div>`);
+  const editB=el(`<button class="btn btn-ghost btn-sm">✏️ ${esc(t('edit'))}</button>`);
+  editB.onclick=(ev)=>{ev.stopPropagation(); editEntry(e);};
+  const delB=el(`<button class="btn btn-red btn-sm">🗑 ${esc(t('del'))}</button>`);
+  delB.onclick=(ev)=>{ev.stopPropagation(); if(confirm(t('del_confirm'))){ S.entries=S.entries.filter(x=>x.id!==e.id); save(); render(); }};
+  acts.appendChild(editB); acts.appendChild(delB);
+  det.appendChild(acts);
+  card.appendChild(det);
+  head.style.cursor='pointer';
+  head.onclick=()=>{ det.style.display = det.style.display==='none'?'block':'none'; };
+  return card;
+}
+function editEntry(e){
+  HE={ supplierId:e.supplierId, date:e.date, note:e.note||'', receipt:e.receipt||null, receiptName:e.receiptName||'',
+    editId:e.id, lines:e.lines.map(l=>({productId:l.productId, ordered:l.ordered, received:l.received})) };
+  go('heute');
+}
+function openReceipt(dataUrl){ const w=window.open(); if(w){ w.document.write('<iframe src="'+dataUrl+'" style="border:0;width:100vw;height:100vh"></iframe>'); } }
+
+/* ============================================================
+   VIEW 3 — Aylık Rapor (Bericht)
+   ============================================================ */
+function firstOfMonth(off=0){ const d=new Date(); d.setMonth(d.getMonth()+off,1); return d.toISOString().slice(0,10); }
+function lastOfMonth(off=0){ const d=new Date(); d.setMonth(d.getMonth()+off+1,0); return d.toISOString().slice(0,10); }
+let BF = { from:firstOfMonth(0), to:lastOfMonth(0), group:'product', supplierId:'' };
+function viewBericht(){
+  const wrap=el(`<div></div>`);
+  wrap.appendChild(el(`<div class="pagehead"><div>
+      <h2>${esc(t('ber_h'))}</h2><p>${esc(t('ber_sub'))}</p></div>
+      <button class="btn btn-ghost" id="printBtn">🖨 ${esc(t('print'))}</button></div>`));
+
+  // filter card
+  const fc=el(`<div class="card"></div>`);
+  const fr=el(`<div class="row" style="align-items:flex-end"></div>`);
+  const mk=(lbl,val,on,type='date')=>{ const w=el(`<div></div>`); w.appendChild(el(`<label class="lbl">${esc(lbl)}</label>`));
+    const i=el(`<input type="${type}" class="inp" value="${val}">`); i.onchange=()=>{on(i.value);}; w.appendChild(i); return w; };
+  fr.appendChild(mk(t('from'),BF.from,v=>{BF.from=v;render();}));
+  fr.appendChild(mk(t('to'),BF.to,v=>{BF.to=v;render();}));
+  // group by
+  const gW=el(`<div></div>`); gW.appendChild(el(`<label class="lbl">${esc(t('groupby'))}</label>`));
+  const gS=el(`<select class="inp"><option value="product" ${BF.group==='product'?'selected':''}>${esc(t('g_product'))}</option><option value="supplier" ${BF.group==='supplier'?'selected':''}>${esc(t('g_supplier'))}</option></select>`);
+  gS.onchange=()=>{BF.group=gS.value;render();}; gW.appendChild(gS); fr.appendChild(gW);
+  // supplier filter
+  const sW=el(`<div></div>`); sW.appendChild(el(`<label class="lbl">${esc(t('filt_supplier'))}</label>`));
+  const sS=el(`<select class="inp"><option value="">${esc(t('filt_all'))}</option></select>`);
+  S.suppliers.forEach(s=> sS.appendChild(el(`<option value="${s.id}" ${BF.supplierId===s.id?'selected':''}>${esc(s.name)}</option>`)));
+  sS.onchange=()=>{BF.supplierId=sS.value;render();}; sW.appendChild(sS); fr.appendChild(sW);
+  fc.appendChild(fr);
+  // quick ranges
+  const qr=el(`<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"></div>`);
+  const qb=(lbl,f,to)=>{ const b=el(`<button class="btn btn-ghost btn-sm">${esc(lbl)}</button>`); b.onclick=()=>{BF.from=f;BF.to=to;render();}; return b; };
+  qr.appendChild(qb(t('thismonth'),firstOfMonth(0),lastOfMonth(0)));
+  qr.appendChild(qb(t('lastmonth'),firstOfMonth(-1),lastOfMonth(-1)));
+  fc.appendChild(qr);
+  wrap.appendChild(fc);
+
+  // compute
+  const data=computeReport();
+  // stat row
+  const sr=el(`<div class="row" style="margin-top:16px"></div>`);
+  sr.appendChild(el(`<div class="stat"><div class="k">${esc(t('net_pcs'))}</div><div class="v tnum">${data.totalPcs.toLocaleString('de-DE')}</div></div>`));
+  sr.appendChild(el(`<div class="stat"><div class="k">${esc(t('net_eur'))}</div><div class="v tnum">€ ${eur(data.totalEur)}</div></div>`));
+  sr.appendChild(el(`<div class="stat"><div class="k">${esc(t('records'))}</div><div class="v sm tnum">${data.count}</div></div>`));
+  wrap.appendChild(sr);
+
+  if(data.count===0){
+    wrap.appendChild(el(`<div class="empty"><span class="ic">📊</span>${esc(t('empty_ber'))}</div>`));
+  } else {
+    const out=el(`<div class="card" style="margin-top:16px"></div>`);
+    data.groups.forEach(g=>{
+      out.appendChild(el(`<div class="grp-h">${esc(g.label)}<span class="ln"></span><span class="tnum" style="font-size:13px;color:var(--mid)">${g.pcs} ${esc(t('pcs'))} · € ${eur(g.eur)}</span></div>`));
+      const tbl=el(`<table class="tb"></table>`);
+      tbl.appendChild(el(`<thead><tr><th>${esc(BF.group==='product'?t('product'):t('product'))}</th><th class="num">${esc(t('net_pcs'))}</th><th class="num">${esc(t('unitprice'))}</th><th class="num">${esc(t('amount'))}</th></tr></thead>`));
+      const tb=el(`<tbody></tbody>`);
+      g.rows.forEach(r=> tb.appendChild(el(`<tr><td>${esc(r.name)} <span class="sub">${r.unit?esc(r.unit):''}</span></td><td class="num tnum">${r.pcs.toLocaleString('de-DE')}</td><td class="num tnum">${eur(r.price)}</td><td class="num tnum">€ ${eur(r.eur)}</td></tr>`)));
+      tbl.appendChild(tb); out.appendChild(tbl);
+    });
+    // grand total
+    out.appendChild(el(`<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:2px solid var(--gold)">
+        <span class="serif" style="font-size:16px;color:var(--gold);letter-spacing:.5px">${esc(t('grand_total'))}</span>
+        <span class="serif tnum" style="font-size:25px;font-weight:600;color:var(--gold)">€ ${eur(data.totalEur)}</span></div>`));
+    wrap.appendChild(out);
+  }
+  setTimeout(()=>{ const pb=document.getElementById('printBtn'); if(pb) pb.onclick=()=>printReport(data); },0);
+  return wrap;
+}
+function computeReport(){
+  let list=S.entries.filter(e=> e.date>=BF.from && e.date<=BF.to);
+  if(BF.supplierId) list=list.filter(e=>e.supplierId===BF.supplierId);
+  let totalPcs=0,totalEur=0;
+  const groups={};
+  list.forEach(e=>{
+    e.lines.forEach(l=>{
+      const pcs=l.received, eurv=l.received*l.price;
+      totalPcs+=pcs; totalEur+=eurv;
+      let gKey,gLabel;
+      if(BF.group==='supplier'){ const s=supById(e.supplierId)||{}; gKey=e.supplierId; gLabel=s.name||'?'; }
+      else { const s=supById(e.supplierId)||{}; gKey=e.supplierId; gLabel=s.name||'?'; } // products grouped under supplier heading
+      if(!groups[gKey]) groups[gKey]={label:gLabel,pcs:0,eur:0,rows:{}};
+      groups[gKey].pcs+=pcs; groups[gKey].eur+=eurv;
+      const rKey=l.productId||l.name;
+      if(!groups[gKey].rows[rKey]) groups[gKey].rows[rKey]={name:l.name,unit:l.unit,price:l.price,pcs:0,eur:0};
+      groups[gKey].rows[rKey].pcs+=pcs; groups[gKey].rows[rKey].eur+=eurv;
+    });
+  });
+  let gArr=Object.values(groups).map(g=>({label:g.label,pcs:g.pcs,eur:g.eur,
+    rows:Object.values(g.rows).sort((a,b)=>b.eur-a.eur)}));
+  gArr.sort((a,b)=>b.eur-a.eur);
+  return {groups:gArr,totalPcs,totalEur,count:list.length};
+}
+function printReport(data){
+  const css=`body{font-family:Georgia,serif;color:#222;padding:30px;max-width:760px;margin:auto}
+    h1{font-size:22px;margin:0 0 4px}.meta{color:#777;font-size:13px;margin-bottom:18px}
+    .grp{font-size:15px;font-weight:bold;margin:18px 0 6px;border-bottom:2px solid #c8a24a;padding-bottom:3px;display:flex;justify-content:space-between}
+    table{width:100%;border-collapse:collapse;margin-bottom:6px;font-size:13px}
+    th{text-align:left;border-bottom:1px solid #999;padding:5px 8px;font-size:11px;text-transform:uppercase;color:#666}
+    td{padding:5px 8px;border-bottom:1px solid #eee}.num{text-align:right;font-variant-numeric:tabular-nums}
+    .gt{display:flex;justify-content:space-between;margin-top:20px;padding-top:10px;border-top:3px double #c8a24a;font-size:18px;font-weight:bold}
+    .st{display:flex;gap:30px;margin:10px 0 4px;font-size:13px;color:#444}`;
+  let h=`<h1>${esc(t('print_title'))}</h1><div class="meta">${esc(t('period'))}: ${fmtDate(BF.from)} – ${fmtDate(BF.to)}`;
+  if(BF.supplierId){ const s=supById(BF.supplierId); h+=` · ${esc(s?s.name:'')}`; }
+  h+=` &nbsp;|&nbsp; ${esc(t('generated'))}: ${fmtDate(today())}</div>`;
+  h+=`<div class="st"><span>${esc(t('net_pcs'))}: <b>${data.totalPcs.toLocaleString('de-DE')}</b></span><span>${esc(t('records'))}: <b>${data.count}</b></span></div>`;
+  data.groups.forEach(g=>{
+    h+=`<div class="grp"><span>${esc(g.label)}</span><span>${g.pcs} ${esc(t('pcs'))} · € ${eur(g.eur)}</span></div>`;
+    h+=`<table><thead><tr><th>${esc(t('product'))}</th><th class="num">${esc(t('net_pcs'))}</th><th class="num">${esc(t('unitprice'))}</th><th class="num">${esc(t('amount'))}</th></tr></thead><tbody>`;
+    g.rows.forEach(r=> h+=`<tr><td>${esc(r.name)} ${r.unit?('('+esc(r.unit)+')'):''}</td><td class="num">${r.pcs}</td><td class="num">${eur(r.price)}</td><td class="num">€ ${eur(r.eur)}</td></tr>`);
+    h+=`</tbody></table>`;
+  });
+  h+=`<div class="gt"><span>${esc(t('grand_total'))}</span><span>€ ${eur(data.totalEur)}</span></div>`;
+  const w=window.open('','_blank');
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(t('print_title'))}</title><style>${css}</style></head><body>${h}<script>window.onload=function(){window.print();}<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ============================================================
+   VIEW 4 — Tanımlar (Stammdaten)
+   ============================================================ */
+function viewStamm(){
+  const wrap=el(`<div></div>`);
+  wrap.appendChild(el(`<div class="pagehead"><div>
+      <h2>${esc(t('stamm_h'))}</h2><p>${esc(t('stamm_sub'))}</p></div></div>`));
+
+  // suppliers
+  const sc=el(`<div class="card"></div>`);
+  sc.appendChild(el(`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span class="serif" style="font-size:18px;color:var(--cream)">${esc(t('suppliers'))}</span></div>`));
+  const addSupB=el(`<button class="btn btn-ghost btn-sm" style="margin-bottom:8px">${esc(t('addsupplier'))}</button>`);
+  addSupB.onclick=()=>supplierModal(null);
+  sc.querySelector('div').appendChild(addSupB);
+  const stbl=el(`<table class="tb"></table>`);
+  stbl.appendChild(el(`<thead><tr><th>${esc(t('name'))}</th><th>${esc(t('cat'))}</th><th class="num">${esc(t('products'))}</th><th></th></tr></thead>`));
+  const stb=el(`<tbody></tbody>`);
+  S.suppliers.forEach(s=>{
+    const tr=el(`<tr><td>${esc(s.name)}</td><td><span class="pill pill-${s.category}">${esc(catLabel(s.category))}</span></td><td class="num tnum">${prodsOf(s.id).length}</td><td class="num"></td></tr>`);
+    const actC=tr.lastChild;
+    const eB=el(`<button class="btn btn-ghost btn-sm">✏️</button>`); eB.onclick=()=>supplierModal(s);
+    const dB=el(`<button class="btn btn-red btn-sm" style="margin-left:6px">🗑</button>`);
+    dB.onclick=()=>{ if(confirm(s.name+' — '+t('del')+'?')){ S.suppliers=S.suppliers.filter(x=>x.id!==s.id); S.products=S.products.filter(p=>p.supplierId!==s.id); save(); render(); } };
+    actC.appendChild(eB); actC.appendChild(dB);
+    stb.appendChild(tr);
+  });
+  stbl.appendChild(stb); sc.appendChild(stbl);
+  wrap.appendChild(sc);
+
+  // products grouped by supplier
+  S.suppliers.forEach(s=>{
+    const pc=el(`<div class="card"></div>`);
+    const hd=el(`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"></div>`);
+    hd.appendChild(el(`<span class="serif" style="font-size:16px;color:var(--gold)">${esc(s.name)} <span class="sub">· ${esc(t('products'))}</span></span>`));
+    const aB=el(`<button class="btn btn-ghost btn-sm">${esc(t('addproduct'))}</button>`); aB.onclick=()=>productModal(null,s.id);
+    hd.appendChild(aB); pc.appendChild(hd);
+    const list=prodsOf(s.id);
+    if(list.length===0){ pc.appendChild(el(`<div class="sub" style="padding:8px 2px">${esc(t('no_products'))}</div>`)); }
+    else{
+      const ptbl=el(`<table class="tb"></table>`);
+      ptbl.appendChild(el(`<thead><tr><th>${esc(t('artno'))}</th><th>${esc(t('name'))}</th><th>${esc(t('cat'))}</th><th class="num">${esc(t('unitprice'))}</th><th class="num">${esc(t('defaultqty'))}</th><th></th></tr></thead>`));
+      const ptb=el(`<tbody></tbody>`);
+      list.forEach(p=>{
+        const tr=el(`<tr><td class="sub tnum">${esc(p.art||'')}</td><td>${esc(p.name)}</td><td><span class="pill pill-${p.category}">${esc(catLabel(p.category))}</span></td><td class="num tnum">${eur(p.price)}</td><td class="num tnum">${p.defaultQty} <span class="sub">${esc(p.unit||'')}</span></td><td class="num"></td></tr>`);
+        const ac=tr.lastChild;
+        const eB=el(`<button class="btn btn-ghost btn-sm">✏️</button>`); eB.onclick=()=>productModal(p,s.id);
+        const dB=el(`<button class="btn btn-red btn-sm" style="margin-left:6px">🗑</button>`);
+        dB.onclick=()=>{ if(confirm(p.name+' — '+t('del')+'?')){ S.products=S.products.filter(x=>x.id!==p.id); save(); render(); } };
+        ac.appendChild(eB); ac.appendChild(dB); ptb.appendChild(tr);
+      });
+      ptbl.appendChild(ptb); pc.appendChild(ptbl);
+    }
+    wrap.appendChild(pc);
+  });
+
+  // backup
+  const bc=el(`<div class="card"></div>`);
+  bc.appendChild(el(`<span class="serif" style="font-size:16px;color:var(--cream)">${esc(t('backup'))}</span>`));
+  const br=el(`<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"></div>`);
+  const exB=el(`<button class="btn btn-ghost btn-sm">⬇ ${esc(t('export'))}</button>`); exB.onclick=exportData;
+  const imB=el(`<button class="btn btn-ghost btn-sm">⬆ ${esc(t('import'))}</button>`);
+  const imInp=el(`<input type="file" accept="application/json" style="display:none">`);
+  imB.onclick=()=>imInp.click();
+  imInp.onchange=()=>{ const f=imInp.files[0]; if(!f) return; const rd=new FileReader();
+    rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d&&d.suppliers){ S=d; S.view='stamm'; save(); render(); toast(t('saved')); } }catch(e){ toast('JSON ?'); } }; rd.readAsText(f); };
+  const rsB=el(`<button class="btn btn-red btn-sm">↺ ${esc(t('reset'))}</button>`);
+  rsB.onclick=()=>{ if(confirm(t('reset_confirm'))){ S=seed(); S.view='stamm'; save(); render(); } };
+  br.appendChild(exB); br.appendChild(imB); br.appendChild(imInp); br.appendChild(rsB);
+  bc.appendChild(br);
+  wrap.appendChild(bc);
+  return wrap;
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='mal-takip-'+today()+'.json'; a.click();
+}
+
+/* ---------- modals ---------- */
+function modal(titleHtml, bodyNode, onSave){
+  const ov=el(`<div class="ov"></div>`);
+  const m=el(`<div class="modal"></div>`);
+  const h=el(`<div class="modal-h">${titleHtml}<button class="x">×</button></div>`);
+  h.querySelector('.x').onclick=()=>ov.remove();
+  const b=el(`<div class="modal-b"></div>`); b.appendChild(bodyNode);
+  const f=el(`<div class="modal-f"></div>`);
+  const cancel=el(`<button class="btn btn-ghost">${esc(t('cancel'))}</button>`); cancel.onclick=()=>ov.remove();
+  const sv=el(`<button class="btn btn-gold">${esc(t('save'))}</button>`); sv.onclick=()=>{ if(onSave()!==false) ov.remove(); };
+  f.appendChild(cancel); f.appendChild(sv);
+  m.appendChild(h); m.appendChild(b); m.appendChild(f); ov.appendChild(m);
+  ov.onclick=(e)=>{ if(e.target===ov) ov.remove(); };
+  document.body.appendChild(ov);
+}
+const CATS=['brot','gebaeck','lebensmittel','sonstige'];
+function field(lbl,node){ const w=el(`<div style="margin-bottom:13px"></div>`); w.appendChild(el(`<label class="lbl">${esc(lbl)}</label>`)); w.appendChild(node); return w; }
+function catSelect(val){ const s=el(`<select class="inp"></select>`); CATS.forEach(c=> s.appendChild(el(`<option value="${c}" ${val===c?'selected':''}>${esc(catLabel(c))}</option>`))); return s; }
+
+function supplierModal(s){
+  const body=el(`<div></div>`);
+  const nameI=el(`<input class="inp" value="${s?esc(s.name):''}">`);
+  const catS=catSelect(s?s.category:'brot');
+  body.appendChild(field(t('name'),nameI));
+  body.appendChild(field(t('cat'),catS));
+  modal(`<div><h3>${esc(s?t('edit_supplier'):t('new_supplier'))}</h3></div>`, body, ()=>{
+    const name=nameI.value.trim(); if(!name){ nameI.focus(); return false; }
+    if(s){ s.name=name; s.category=catS.value; }
+    else S.suppliers.push({id:'s_'+uid(),name,category:catS.value,color:'#E8C880'});
+    save(); render();
+  });
+}
+function productModal(p,supplierId){
+  const body=el(`<div></div>`);
+  const artI=el(`<input class="inp" value="${p?esc(p.art||''):''}">`);
+  const nameI=el(`<input class="inp" value="${p?esc(p.name):''}">`);
+  const catS=catSelect(p?p.category:(supById(supplierId)||{}).category||'brot');
+  const unitI=el(`<input class="inp" value="${p?esc(p.unit||'Stk'):'Stk'}">`);
+  const priceI=el(`<input class="inp" type="number" step="0.01" min="0" value="${p?p.price:0}">`);
+  const qtyI=el(`<input class="inp" type="number" min="0" value="${p?p.defaultQty:0}">`);
+  body.appendChild(field(t('artno'),artI));
+  body.appendChild(field(t('name'),nameI));
+  body.appendChild(field(t('cat'),catS));
+  const row=el(`<div class="row"></div>`);
+  row.appendChild(field(t('unit'),unitI)); row.appendChild(field(t('unitprice'),priceI)); row.appendChild(field(t('defaultqty'),qtyI));
+  body.appendChild(row);
+  modal(`<div><h3>${esc(p?t('edit_product'):t('new_product'))}</h3><p>${esc((supById(supplierId)||{}).name||'')}</p></div>`, body, ()=>{
+    const name=nameI.value.trim(); if(!name){ nameI.focus(); return false; }
+    const data={art:artI.value.trim(),name,category:catS.value,unit:unitI.value.trim()||'Stk',
+      price:Number(priceI.value)||0,defaultQty:parseInt(qtyI.value)||0};
+    if(p){ Object.assign(p,data); }
+    else S.products.push(Object.assign({id:'p_'+uid(),supplierId},data));
+    save(); render();
+  });
+}
+
+/* ---------- boot ---------- */
+document.documentElement.lang=S.lang;
+render();
+</script>
+</body>
+</html>
