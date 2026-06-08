@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "../lib/store";
 import { useT } from "../lib/useT";
-import { toast } from "./ui";
-import { fetchServerData, saveServerData } from "../lib/serverSync";
+import { Button, toast } from "./ui";
+import { fetchServerData, saveServerData, quitServer } from "../lib/serverSync";
 
 // Üstte ince durum çubuğu. Yerel sunucu varsa veriyi diske otomatik kaydeder;
 // sunucu yoksa kullanıcıyı uyarır (veri yine tarayıcıda çalışır).
@@ -83,20 +83,38 @@ export default function SyncBar() {
   }
 
   // server
+  async function onQuit() {
+    if (!confirm(t("sync_quit_confirm"))) return;
+    try {
+      await quitServer();
+    } catch {
+      /* sunucu zaten kapanmış olabilir */
+    }
+    document.body.innerHTML =
+      '<div style="font-family:Inter,sans-serif;padding:40px;text-align:center;color:#555">' +
+      t("sync_closed") +
+      "</div>";
+  }
+
   return wrap(
     "var(--green)",
-    <span>
-      💾 {t("sync_saved")}
-      {lastSaved && (
-        <span className="sub">
-          {" · "}
-          {t("sync_last")}{" "}
-          {lastSaved.toLocaleTimeString(t.lang === "de" ? "de-DE" : "tr-TR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      )}
-    </span>
+    <>
+      <span style={{ flex: 1, minWidth: 160 }}>
+        💾 {t("sync_saved")}
+        {lastSaved && (
+          <span className="sub">
+            {" · "}
+            {t("sync_last")}{" "}
+            {lastSaved.toLocaleTimeString(t.lang === "de" ? "de-DE" : "tr-TR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        )}
+      </span>
+      <Button sm variant="ghost" onClick={onQuit}>
+        ⏻ {t("sync_quit")}
+      </Button>
+    </>
   );
 }

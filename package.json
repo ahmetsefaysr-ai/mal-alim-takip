@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server/server.cjs",
-    "build:app": "npm run build && node scripts/build-exe.mjs"
+    "build:app": "npm run build && node scripts/build-exe.mjs",
+    "build:mac": "npm run build && node scripts/build-mac-app.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

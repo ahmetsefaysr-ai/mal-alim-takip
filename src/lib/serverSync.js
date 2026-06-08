@@ -20,3 +20,8 @@ export async function saveServerData(data) {
   if (!res.ok) throw new Error("server-put");
   return res.json();
 }
+
+// Yerel sunucuyu (uygulamayı) kapatır
+export async function quitServer() {
+  await fetch("/api/quit", { method: "POST" });
+}

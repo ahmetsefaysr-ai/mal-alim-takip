@@ -14,3 +14,11 @@ server/bundle.cjs
 sea-prep.blob
 mal-alim-takip
 mal-alim-takip.exe
+# macOS paketi
+node-arm64
+node-x64
+node-x64.tar.gz
+node-v*-darwin-x64/
+MalAlimTakip-bin
+MalAlimTakip.app/
+MalAlimTakip-mac.zip

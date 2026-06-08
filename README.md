@@ -23,16 +23,24 @@ edersin. (Veri klasörünü değiştirmek için `MALTAKIP_DIR` ortam değişkeni
 - Açık & profesyonel tasarım (Inter + Fraunces), TR / DE
 
 ## Çalıştırma (kurulumsuz)
-1. **Hazır paketi indir:** GitHub → **Actions** sekmesi → son "Tek-tıklık uygulamayı hazırla"
-   çalışması → işletim sistemine uygun artefakt:
-   `mal-alim-takip-mac` (Mac) · `mal-alim-takip-windows` (Windows).
-   (Bir sürüm etiketi `v1.0` gönderirsen dosyalar **Releases** altında da yer alır.)
-2. Dosyayı **çift tıkla** → bir konsol penceresi açılır, sunucu başlar, tarayıcı otomatik gelir.
-   Kapatmak için o pencereyi kapat.
-3. Hepsi bu — kayıtların `~/MalAlimTakip/` klasörüne otomatik kaydedilir.
+GitHub → **Actions** sekmesi → son "Tek-tıklık uygulamayı hazırla" çalışması → işletim sistemine
+uygun artefaktı indir. (Sürüm etiketi `v1.0` gönderirsen dosyalar **Releases** altında da çıkar.)
 
-> İlk açılışta işletim sistemi güvenlik uyarısı verirse (imzasız uygulama):
-> **Mac** → dosyaya sağ tık → *Aç* → *Aç*. **Windows** → "Daha fazla bilgi" → *Yine de çalıştır*.
+**Mac** (`mal-alim-takip-mac` → `MalAlimTakip-mac.zip`):
+1. Zip'i aç → **`MalAlimTakip.app`** çıkar.
+2. İlk seferde: app'e **sağ tık → Aç → Aç** (imzasız uygulama uyarısı bir kez çıkar).
+3. Çift tıkla → Terminal açılmadan arka planda başlar, tarayıcı otomatik gelir.
+4. Kapatmak için sayfadaki üst çubukta **⏻ Kapat** düğmesine bas.
+
+> Apple Silicon (M1–M4) **ve** Intel Mac'lerin ikisinde de çalışır (evrensel/universal paket).
+
+**Windows** (`mal-alim-takip-windows` → `mal-alim-takip.exe`):
+1. `.exe`'yi **çift tıkla** → bir konsol penceresi açılır, sunucu başlar, tarayıcı gelir.
+   (SmartScreen çıkarsa: "Daha fazla bilgi" → *Yine de çalıştır*.)
+2. Kapatmak için sayfadaki **⏻ Kapat** düğmesi (ya da konsol penceresini kapat).
+
+Her iki durumda kayıtların `~/MalAlimTakip/` (Windows'ta `C:\Users\<sen>\MalAlimTakip`) klasörüne
+otomatik kaydedilir.
 
 ## Geliştirme
 ```bash

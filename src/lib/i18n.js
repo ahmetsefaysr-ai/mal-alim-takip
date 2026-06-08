@@ -114,6 +114,9 @@ export const I18N = {
     sync_error: "Diske kaydedilemedi",
     sync_standalone:
       "Sunucu çalışmıyor — veriler şimdilik bu tarayıcıda. Kalıcı saklama için uygulamayı 'Başlat' kısayoluyla aç. Yedek: Tanımlar → Dışa aktar (JSON).",
+    sync_quit: "Kapat",
+    sync_quit_confirm: "Uygulama kapatılsın mı? Kayıtların zaten diske kaydedildi.",
+    sync_closed: "Uygulama kapatıldı. Bu sekmeyi kapatabilirsiniz.",
   },
   de: {
     brandT1: "Wareneingang & Einkauf",
@@ -224,6 +227,9 @@ export const I18N = {
     sync_error: "Speichern auf Festplatte fehlgeschlagen",
     sync_standalone:
       "Server läuft nicht — Daten liegen vorerst im Browser. Für dauerhafte Speicherung die App über die Verknüpfung 'Start' öffnen. Sicherung: Stammdaten → Export (JSON).",
+    sync_quit: "Schließen",
+    sync_quit_confirm: "App schließen? Deine Einträge wurden bereits gespeichert.",
+    sync_closed: "App geschlossen. Du kannst diesen Tab schließen.",
   },
 };
 

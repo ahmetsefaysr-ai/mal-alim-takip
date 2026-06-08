@@ -21,12 +21,15 @@ jobs:
         include:
           - os: macos-latest
             artifact: mal-alim-takip-mac
-            file: mal-alim-takip
+            cmd: npm run build:mac
+            file: MalAlimTakip-mac.zip
           - os: windows-latest
             artifact: mal-alim-takip-windows
+            cmd: npm run build:app
             file: mal-alim-takip.exe
           - os: ubuntu-latest
             artifact: mal-alim-takip-linux
+            cmd: npm run build:app
             file: mal-alim-takip
     runs-on: ${{ matrix.os }}
     steps:
@@ -36,7 +39,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build:app
+      - run: ${{ matrix.cmd }}
 
       # Her derlemede: Actions sekmesinden indirilebilir çalıştırılabilir
       - uses: actions/upload-artifact@v4

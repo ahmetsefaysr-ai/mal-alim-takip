@@ -100,6 +100,15 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Uygulamayı kapat (sayfadaki "Kapat" düğmesi)
+  if (url === "/api/quit" && (req.method === "POST" || req.method === "GET")) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
+    console.log("Kapatma isteği alındı — çıkılıyor.");
+    setTimeout(() => process.exit(0), 200);
+    return;
+  }
+
   // Diğer her yol → uygulamayı sun
   res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
   res.end(getIndexHtml());
