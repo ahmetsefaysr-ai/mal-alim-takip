@@ -5,8 +5,12 @@ Metro…) gelen malı kaydet, fişi ekle, aylık toplam masrafı ve **net kârı
 Kağıt irsaliyeleri tek tek toplama derdini bitirir.
 
 **Tamamen yerel çalışır:** canlı/web yayını yoktur. Uygulama tek bir HTML dosyasıdır;
-Mac veya Windows'ta **çift tıklayınca tarayıcıda açılır**, kurulum/internet gerekmez ve
-tüm veri o bilgisayarda (**localStorage**) saklanır.
+Mac veya Windows'ta **çift tıklayınca tarayıcıda açılır**, kurulum/internet gerekmez.
+
+**Veri güvenli — diskte gerçek bir dosyada:** Açılışta üstteki çubuktan bir **veri dosyası
+(`.json`) oluşturur ya da mevcut dosyanı açarsın. Tüm kayıtlar o dosyaya **otomatik** yazılır;
+tarayıcı hafızası temizlense bile veri dosyada durur. (Bu özellik **Chrome / Edge** ister; başka
+tarayıcıda uygulama yine çalışır ama yedeği elle **Tanımlar → Dışa aktar** ile almalısın.)
 
 ## Teknoloji
 - **Vite + React 18** (JSX) → `vite-plugin-singlefile` ile **tek dosyalık** build
@@ -17,11 +21,12 @@ tüm veri o bilgisayarda (**localStorage**) saklanır.
 1. **Hazır dosyayı indir:** GitHub'da **Actions** sekmesi → son "Yerel uygulama dosyasını hazırla"
    çalışması → `mal-alim-takip-uygulama` artefaktını indir (içinden `mal-alim-takip.html` çıkar).
    (Bir sürüm etiketi `v1.0` gönderirsen dosya **Releases** altında da yer alır.)
-2. `mal-alim-takip.html` dosyasını **çift tıkla** → uygulama açılır. Veriler bu tarayıcıda kalır.
-3. Yedek için: **Tanımlar → Dışa aktar (JSON)**. Başka makineye taşımak için JSON'u içe aktar.
+2. `mal-alim-takip.html` dosyasını **çift tıkla** → uygulama açılır (Chrome/Edge önerilir).
+3. Üstteki çubuktan **"Veri dosyası oluştur"** ile bir `.json` seç → kayıtlar artık o dosyaya
+   otomatik kaydedilir. Sonraki açılışlarda **"Bağlan"** ile aynı dosyaya devam edersin.
 
-> Not: Verinin silinmemesi için dosyayı hep aynı yerden / aynı tarayıcıyla aç. Yazı tipleri
-> çevrimiçiyken Google Fonts'tan gelir; internet yoksa sistem fontuna düşer, uygulama yine çalışır.
+> Not: Yazı tipleri çevrimiçiyken Google Fonts'tan gelir; internet yoksa sistem fontuna düşer,
+> uygulama yine çalışır. Ek güvenlik için **Tanımlar → Dışa aktar (JSON)** ile de yedek alabilirsin.
 
 ## Geliştirme
 ```bash

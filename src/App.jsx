@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useStore } from "./lib/store";
 import { useT } from "./lib/useT";
 import { cx, Toast } from "./components/ui";
+import DataFileBar from "./components/DataFileBar.jsx";
 import GoodsInView from "./components/goodsin/GoodsInView.jsx";
 import RecordsView from "./components/records/RecordsView.jsx";
 import ReportView from "./components/report/ReportView.jsx";
@@ -64,6 +65,9 @@ export default function App() {
       </header>
 
       <main>
+        <div className="container">
+          <DataFileBar />
+        </div>
         <div className="container fade-up" key={view}>
           {view === "heute" && (
             <GoodsInView draft={draft} setDraft={setDraft} onSaved={() => go("eingaenge")} />
