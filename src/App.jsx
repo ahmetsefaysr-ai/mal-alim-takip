@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStore } from "./lib/store";
 import { useT } from "./lib/useT";
 import { cx, Toast } from "./components/ui";
-import DataFileBar from "./components/DataFileBar.jsx";
+import SyncBar from "./components/SyncBar.jsx";
 import GoodsInView from "./components/goodsin/GoodsInView.jsx";
 import RecordsView from "./components/records/RecordsView.jsx";
 import ReportView from "./components/report/ReportView.jsx";
@@ -66,7 +66,7 @@ export default function App() {
 
       <main>
         <div className="container">
-          <DataFileBar />
+          <SyncBar />
         </div>
         <div className="container fade-up" key={view}>
           {view === "heute" && (

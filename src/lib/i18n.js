@@ -108,20 +108,12 @@ export const I18N = {
     generated: "Oluşturulma",
     back_today: "Bugün",
 
-    // Veri dosyası (yerel disk)
-    df_warn:
-      "Veriler henüz bir dosyaya bağlı değil. Kalıcı ve güvenli saklamak için bir veri dosyası oluştur ya da mevcut dosyanı aç.",
-    df_create: "Veri dosyası oluştur",
-    df_open: "Mevcut dosyayı aç",
-    df_reconnect: "kayıtlı veri dosyana yeniden bağlan",
-    df_connect: "Bağlan",
-    df_other: "Başka dosya",
-    df_autosave: "diske otomatik kaydediliyor",
-    df_last: "son:",
-    df_disconnect: "Bağlantıyı kes",
-    df_unsupported:
-      "Bu tarayıcı dosyaya otomatik kaydı desteklemiyor — Chrome veya Edge kullan. Yedek için Tanımlar → Dışa aktar (JSON).",
-    df_saveerr: "Dosyaya yazılamadı",
+    // Sunucu / disk senkronu
+    sync_saved: "diske otomatik kaydediliyor",
+    sync_last: "son:",
+    sync_error: "Diske kaydedilemedi",
+    sync_standalone:
+      "Sunucu çalışmıyor — veriler şimdilik bu tarayıcıda. Kalıcı saklama için uygulamayı 'Başlat' kısayoluyla aç. Yedek: Tanımlar → Dışa aktar (JSON).",
   },
   de: {
     brandT1: "Wareneingang & Einkauf",
@@ -226,20 +218,12 @@ export const I18N = {
     generated: "Erstellt",
     back_today: "Heute",
 
-    // Datendatei (lokale Festplatte)
-    df_warn:
-      "Daten sind noch mit keiner Datei verbunden. Für dauerhafte, sichere Speicherung eine Datendatei erstellen oder eine vorhandene öffnen.",
-    df_create: "Datendatei erstellen",
-    df_open: "Vorhandene Datei öffnen",
-    df_reconnect: "mit gespeicherter Datendatei verbinden",
-    df_connect: "Verbinden",
-    df_other: "Andere Datei",
-    df_autosave: "wird automatisch auf Festplatte gespeichert",
-    df_last: "zuletzt:",
-    df_disconnect: "Trennen",
-    df_unsupported:
-      "Dieser Browser unterstützt kein automatisches Speichern in Dateien — bitte Chrome oder Edge verwenden. Sicherung über Stammdaten → Export (JSON).",
-    df_saveerr: "Datei konnte nicht gespeichert werden",
+    // Server / Festplatten-Sync
+    sync_saved: "wird automatisch auf Festplatte gespeichert",
+    sync_last: "zuletzt:",
+    sync_error: "Speichern auf Festplatte fehlgeschlagen",
+    sync_standalone:
+      "Server läuft nicht — Daten liegen vorerst im Browser. Für dauerhafte Speicherung die App über die Verknüpfung 'Start' öffnen. Sicherung: Stammdaten → Export (JSON).",
   },
 };
 

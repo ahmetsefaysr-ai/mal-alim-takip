@@ -7,3 +7,10 @@ dist
 
 .claude/
 legacy/.DS_Store
+
+# Paketleme çıktıları
+server/index.generated.cjs
+server/bundle.cjs
+sea-prep.blob
+mal-alim-takip
+mal-alim-takip.exe

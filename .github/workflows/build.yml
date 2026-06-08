@@ -1,7 +1,8 @@
-name: Yerel uygulama dosyasını hazırla
+name: Tek-tıklık uygulamayı hazırla
 
-# Canlı yayın (GitHub Pages) yerine: tek dosyalık, yerelde çift tıkla açılan
-# uygulamayı (dist/index.html) otomatik derler ve indirilebilir hale getirir.
+# Canlı yayın (GitHub Pages) yerine: Node gömülü, çift tıkla çalışan paketi
+# her işletim sistemi için otomatik üretir. Çalıştırınca yerel sunucu başlar,
+# tarayıcı açılır; veri diske (kullanıcı klasörü/MalAlimTakip) kaydedilir.
 
 on:
   push:
@@ -14,7 +15,20 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            artifact: mal-alim-takip-mac
+            file: mal-alim-takip
+          - os: windows-latest
+            artifact: mal-alim-takip-windows
+            file: mal-alim-takip.exe
+          - os: ubuntu-latest
+            artifact: mal-alim-takip-linux
+            file: mal-alim-takip
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,20 +36,17 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: npm run build:app
 
-      # Tek dosyayı anlaşılır bir isimle kopyala
-      - run: cp dist/index.html mal-alim-takip.html
-
-      # Her derlemede: Actions sekmesinden indirilebilir dosya
+      # Her derlemede: Actions sekmesinden indirilebilir çalıştırılabilir
       - uses: actions/upload-artifact@v4
         with:
-          name: mal-alim-takip-uygulama
-          path: mal-alim-takip.html
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.file }}
 
-      # Bir sürüm etiketi (v1.0 gibi) gönderilince: Releases'e otomatik ekle
-      - name: Sürüm oluştur
+      # Sürüm etiketi (v1.0 gibi) gönderilince: Releases'e otomatik ekle
+      - name: Sürüme ekle
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: mal-alim-takip.html
+          files: ${{ matrix.file }}

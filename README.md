@@ -4,36 +4,43 @@ Fırın için **sade muhasebe / mal-alım takip** uygulaması. Tedarikçilerden 
 Metro…) gelen malı kaydet, fişi ekle, aylık toplam masrafı ve **net kârı** (ciro − maliyet) gör.
 Kağıt irsaliyeleri tek tek toplama derdini bitirir.
 
-**Tamamen yerel çalışır:** canlı/web yayını yoktur. Uygulama tek bir HTML dosyasıdır;
-Mac veya Windows'ta **çift tıklayınca tarayıcıda açılır**, kurulum/internet gerekmez.
+**Tamamen yerel çalışır:** canlı/web yayını yoktur. Tek bir çalıştırılabilir dosyadır
+(Node gömülü); Mac veya Windows'ta **çift tıklayınca kendi yerel sunucusunu başlatır** ve
+tarayıcıyı otomatik açar. Kurulum/internet gerekmez.
 
-**Veri güvenli — diskte gerçek bir dosyada:** Açılışta üstteki çubuktan bir **veri dosyası
-(`.json`) oluşturur ya da mevcut dosyanı açarsın. Tüm kayıtlar o dosyaya **otomatik** yazılır;
-tarayıcı hafızası temizlense bile veri dosyada durur. (Bu özellik **Chrome / Edge** ister; başka
-tarayıcıda uygulama yine çalışır ama yedeği elle **Tanımlar → Dışa aktar** ile almalısın.)
+**Veri güvenli — diskte gerçek dosyada + otomatik yedek:** Tüm kayıtlar tarayıcı hafızasında
+**değil**, sunucu tarafından diske yazılır:
+- `~/MalAlimTakip/veriler.json` — ana veri dosyası (her değişiklikte otomatik güncellenir)
+- `~/MalAlimTakip/yedekler/` — her kayıtta **tarihli otomatik yedek** (son 60 sürüm saklanır)
+
+Tarayıcı temizlense bile veri durur; istersen `veriler.json`'u başka makineye kopyalayıp devam
+edersin. (Veri klasörünü değiştirmek için `MALTAKIP_DIR` ortam değişkenini ayarla.)
 
 ## Teknoloji
-- **Vite + React 18** (JSX) → `vite-plugin-singlefile` ile **tek dosyalık** build
-- **zustand** + `persist` → veriler **localStorage**'ta saklanır, hesap/sunucu gerekmez
+- **Vite + React 18** (JSX) → `vite-plugin-singlefile` ile tek HTML; sunucuya gömülür
+- Veri katmanı: **Node yerleşik HTTP sunucusu** (`server/server.cjs`) → diske JSON + yedek
+- Paketleme: **Node SEA** (Single Executable) → tek `.exe` / `.app`, kurulum gerekmez
 - Açık & profesyonel tasarım (Inter + Fraunces), TR / DE
 
-## Yerelde çalıştırma (kurulumsuz)
-1. **Hazır dosyayı indir:** GitHub'da **Actions** sekmesi → son "Yerel uygulama dosyasını hazırla"
-   çalışması → `mal-alim-takip-uygulama` artefaktını indir (içinden `mal-alim-takip.html` çıkar).
-   (Bir sürüm etiketi `v1.0` gönderirsen dosya **Releases** altında da yer alır.)
-2. `mal-alim-takip.html` dosyasını **çift tıkla** → uygulama açılır (Chrome/Edge önerilir).
-3. Üstteki çubuktan **"Veri dosyası oluştur"** ile bir `.json` seç → kayıtlar artık o dosyaya
-   otomatik kaydedilir. Sonraki açılışlarda **"Bağlan"** ile aynı dosyaya devam edersin.
+## Çalıştırma (kurulumsuz)
+1. **Hazır paketi indir:** GitHub → **Actions** sekmesi → son "Tek-tıklık uygulamayı hazırla"
+   çalışması → işletim sistemine uygun artefakt:
+   `mal-alim-takip-mac` (Mac) · `mal-alim-takip-windows` (Windows).
+   (Bir sürüm etiketi `v1.0` gönderirsen dosyalar **Releases** altında da yer alır.)
+2. Dosyayı **çift tıkla** → bir konsol penceresi açılır, sunucu başlar, tarayıcı otomatik gelir.
+   Kapatmak için o pencereyi kapat.
+3. Hepsi bu — kayıtların `~/MalAlimTakip/` klasörüne otomatik kaydedilir.
 
-> Not: Yazı tipleri çevrimiçiyken Google Fonts'tan gelir; internet yoksa sistem fontuna düşer,
-> uygulama yine çalışır. Ek güvenlik için **Tanımlar → Dışa aktar (JSON)** ile de yedek alabilirsin.
+> İlk açılışta işletim sistemi güvenlik uyarısı verirse (imzasız uygulama):
+> **Mac** → dosyaya sağ tık → *Aç* → *Aç*. **Windows** → "Daha fazla bilgi" → *Yine de çalıştır*.
 
 ## Geliştirme
 ```bash
 npm install
-npm run dev      # http://localhost:5173 (geliştirme)
-npm run build    # tek dosyalık üretim → dist/index.html
-npm run preview  # dist önizleme
+npm run dev        # http://localhost:5173 (Vite geliştirme)
+npm run build      # frontend → dist/index.html
+npm run start      # yerel sunucu (dist'i sunar) → http://localhost:4178
+npm run build:app  # tek-tıklık çalıştırılabilir üret (bu OS için)
 ```
 
 ## 4 Modül
@@ -44,5 +51,5 @@ npm run preview  # dist önizleme
 
 ## Notlar
 - Başlangıç ürünleri Kainz Lieferschein'ından; **fiyatlar tahminîdir, Tanımlar'dan düzelt.**
-- Veri tek tarayıcıda durur. Yedek: Tanımlar → "Dışa aktar (JSON)". Çoklu cihaz/senkron istenirse ileride bir sunucuya (ör. Supabase) taşınabilir.
+- Veri `~/MalAlimTakip/veriler.json` dosyasında durur; ayrıca uygulama içinden Tanımlar → "Dışa aktar (JSON)" ile de yedek alınabilir. Çoklu cihaz/senkron istenirse ileride uzak bir sunucuya taşınabilir.
 - `legacy/index.html` — eski tek-dosya sürüm (referans).
